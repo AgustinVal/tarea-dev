@@ -63,7 +63,7 @@ Para realizar lo anterior, se calculó como obtener las dimensiones del mayor re
 
 Luego de obtener ambas medidas del rectángulo interior dependiente de una sola variable, se procede a maximizar el resultado obtenido para encontrar el rectangulo de área máxima:
 
-`&rarr; d(Area(a))/da = h - 4ah/x = 0 &rarr; a = x/4`
+&rarr; `d(Area(a))/da = h - 4ah/x = 0 => a = x/4`
 
 Pero como se estaba considerando la mitad del triángulo se multiplica por dos.
 Dando como resultado que el rectángulo inscrito de área máxima tiene un ancho de `x/2` y un alto de `h/2`.
