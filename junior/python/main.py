@@ -53,7 +53,34 @@ def calculate_panels(panel_width: int, panel_height: int,
     return 0
 
 
-def calculate_panels_triangular(panel_width: int, panel_height: int, 
+
+
+def calculate_panels_triangular_rectangular(panel_width: int, panel_height: int, 
+                    roof_width: int, roof_height: int) -> int:
+    
+    # Explicacion de las variables en el readme
+    
+    rec_insc_width = roof_width // 2
+    rec_insc_height = roof_height // 2
+    
+    # Se revisa si el panel cabe dentro del maximo rectangulo inscrito
+    if (panel_height > roof_height or panel_width > roof_width):
+        return 0
+    
+    # Obtener la mayor cantidad de paneles en el mayor rectangulo inscrito
+    max_rec_insc = calculate_panels(panel_width, panel_height, rec_insc_width, rec_insc_height)
+    
+    # A diferencia de la funcion con triangulo isoceles, en este caso el resultado de extraer el rectangulo inscrito, 
+    # da como resultado 2 triangulos rectangulos restantes equivalentes en medidas, por tanto se duplica la recursion 
+    
+    triangle_recursive = 2 * calculate_panels_triangular_rectangular(panel_width, panel_height, rec_insc_width / 2, rec_insc_height)
+    
+    return max_rec_insc + triangle_recursive
+
+
+
+
+def calculate_panels_triangular_isoceles(panel_width: int, panel_height: int, 
                     roof_width: int, roof_height: int) -> int:
 
     # Para resolver este problema se me ocurrio hacer recursion con el problema anterior
@@ -78,9 +105,14 @@ def calculate_panels_triangular(panel_width: int, panel_height: int,
     # Esto para evitar tener que hacer un caso particular para el triangulo isoceles,
     # y de esta forma tratar a todos como triangulos rectangulos
     
-    triangle_recursive = 2 * calculate_panels_triangular(panel_width, panel_height, rec_insc_width / 2, rec_insc_height)
+    triangles_rectangles = 2 * calculate_panels_triangular_rectangular(panel_width, panel_height, rec_insc_width / 2, rec_insc_height)
     
-    return max_rec_insc + triangle_recursive
+    # La base es el ancho del rectangulo inscrito 
+    triangle_isoceles = calculate_panels_triangular_isoceles(panel_width, panel_height, rec_insc_width, rec_insc_height)
+    
+    return max_rec_insc + triangles_rectangles + triangle_isoceles
+
+
 
 
 # Dado a que se puede parametrizar el area overlapeada, se le dara un ancho y largo 
@@ -100,7 +132,7 @@ def calculate_panels_double_rectangle(panel_width: int, panel_height: int,
 
 
 def run_tests() -> None:
-    with open('C:/Users/avale/Desktop/Projects/Entrevistas/Ruuf/tarea-dev/junior/python/test_cases.json', 'r') as f:
+    with open('test_cases.json', 'r') as f:
         data = json.load(f)
         test_cases: List[Dict[str, int]] = [
             {
